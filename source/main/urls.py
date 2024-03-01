@@ -21,13 +21,10 @@ from rest_framework.routers import DefaultRouter
 from webapp.views import TasksModelViewSet
 
 
-app_name = 'api_v1'
-
 router = DefaultRouter()
 router.register(r'tasks', TasksModelViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls)),
-
 ]

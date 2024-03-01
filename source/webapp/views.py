@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from rest_framework.viewsets import ViewSet, ModelViewSet
+from django.shortcuts import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
 from webapp.models import Tasks
 from webapp.serializers import TasksSerializer
 from rest_framework.response import Response
@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 class TasksModelViewSet(ModelViewSet):
     queryset = Tasks.objects.all()
+    serializer_class = TasksSerializer
 
     def list(self, request):
         objects = Tasks.objects.all()
@@ -16,7 +17,7 @@ class TasksModelViewSet(ModelViewSet):
     def create(self, request):
         slr = Tasks(data=request.data, context={'request': request})
         if slr.is_valid():
-            product = slr.save()
+            task = slr.save()
             return Response(slr.data)
         else:
             return Response(slr.errors, status=400)
@@ -27,10 +28,10 @@ class TasksModelViewSet(ModelViewSet):
         return Response(slr.data)
 
     def update(self, request, pk=None):
-        product = get_object_or_404(Tasks, pk=pk)
-        slr = TasksSerializer(data=request.data, instance=product, context={'request': request})
+        task = get_object_or_404(Tasks, pk=pk)
+        slr = TasksSerializer(data=request.data, instance=task, context={'request': request})
         if slr.is_valid():
-            product = slr.save()
+            task = slr.save()
             return Response(slr.data)
         else:
             return Response(slr.errors, status=400)
